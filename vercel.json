@@ -6,7 +6,7 @@
         "use": "@vercel/node"
       },
       {
-        "src": "build/**",
+        "src": "dist/**",
         "use": "@vercel/static"
       }
     ],
@@ -17,7 +17,7 @@
       },
 
       {
-        "src": "/products//(.*)",
+        "src": "/products/(.*)",
         "dest": "index.js"
       },
 
