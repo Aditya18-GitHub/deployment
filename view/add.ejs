@@ -1,0 +1,51 @@
+<link
+  rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+/>
+<form id="productForm" method="POST" action="/products" enctype="application/x-www-form-urlencoded">
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" id="title" name="title" required>
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" name="description"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="price">Price</label>
+        <input type="number" class="form-control" id="price" name="price" min="0" required>
+    </div>
+
+    <div class="form-group">
+        <label for="discountPercentage">Discount Percentage</label>
+        <input type="number" class="form-control" id="discountPercentage" name="discountPercentage" min="0" max="50">
+    </div>
+
+    <div class="form-group">
+        <label for="rating">Rating</label>
+        <input type="number" class="form-control" id="rating" name="rating" min="0" max="5" value="0">
+    </div>
+
+    <div class="form-group">
+        <label for="category">Category</label>
+        <input type="text" class="form-control" id="category" name="category" required>
+    </div>
+
+    <div class="form-group">
+        <label for="stock">Stock</label>
+        <input type="number" class="form-control" id="stock" name="stock" min="0" required>
+    </div>
+
+    <div class="form-group">
+        <label for="thumbnail">Thumbnail URL</label>
+        <input type="url" class="form-control" id="thumbnail" name="thumbnail" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

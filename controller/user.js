@@ -1,41 +1,82 @@
-const fs = require('fs');
-// const index = fs.readFileSync('index.html', 'utf-8');
-const path = require('path');
-const data = JSON.parse(fs.readFileSync(path.resolve(__dirname,'../data.json'), 'utf-8'));
-const users = data.users;
+const model = require('../model/user');
+const User = model.User; // Adjusted to use the User model directly
+const mongoose = require('mongoose');
 
-exports.createUser = (req, res) => {
-  console.log(req.body);
-  users.push(req.body);
-  res.status(201).json(req.body);
+
+
+exports.createUser = async (req, res) => {
+  try {
+    const user = new User(req.body);
+    const doc = await user.save();
+    res.status(201).json(doc);
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: err.message });
+  }
 };
 
-exports.getAllUsers = (req, res) => {
-  res.json(users);
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
 };
 
-exports.getUser = (req, res) => {
-  const id = +req.params.id;
-  const user = users.find((p) => p.id === id);
-  res.json(user);
+exports.getUser = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: err.message });
+  }
 };
-exports.replaceUser = (req, res) => {
-  const id = +req.params.id;
-  const userIndex = users.findIndex((p) => p.id === id);
-  users.splice(userIndex, 1, { ...req.body, id: id });
-  res.status(201).json();
+
+exports.replaceUser = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const doc = await User.findOneAndReplace({ _id: id }, req.body, { new: true });
+    if (!doc) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(doc);
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: err.message });
+  }
 };
-exports.updateUser = (req, res) => {
-  const id = +req.params.id;
-  const userIndex = users.findIndex((p) => p.id === id);
-  const user = users[userIndex];
-  users.splice(userIndex, 1, { ...user, ...req.body });
-  res.status(201).json();
+
+exports.updateUser = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const doc = await User.findOneAndUpdate({ _id: id }, req.body, { new: true });
+    if (!doc) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(doc);
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: err.message });
+  }
 };
-exports.deleteUser = (req, res) => {
-  const id = +req.params.id;
-  const userIndex = users.findIndex((p) => p.id === id);
-  const user = users[userIndex];
-  users.splice(userIndex, 1);
-  res.status(201).json(user);
+
+exports.deleteUser = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const doc = await User.findOneAndDelete({ _id: id });
+    if (!doc) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(doc);
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({ error: err.message });
+  }
 };

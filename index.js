@@ -9,6 +9,7 @@ const productRouter = require('./routes/product')
 const userRouter = require('./routes/user')
 // console.log('env',process.env.DB_PASSWORD)
 
+
 //db connection
 main().catch(err => console.log(err));
 
@@ -29,7 +30,7 @@ async function main() {
 
 server.use(cors());
 server.use(express.json());
-
+server.use(express.urlencoded());
 server.use(express.static(path.resolve(__dirname,process.env.PUBLIC_DIR)));
 server.use('/products',productRouter.router);
 server.use('/users',userRouter.router);
